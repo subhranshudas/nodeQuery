@@ -51,12 +51,12 @@ async function getMovies (query) {
 async function getAllMovies (moviesPages) {
     let allMovies = await promiseAll(moviesPages);
     let moviesInTotal = [];
-    allMovies
-        .map(({data}) => data)
-        .forEach(movies => {
-            const titlesPerPage =  movies.map(({Title}) => Title)
-            moviesInTotal = [...moviesInTotal, ...titlesPerPage];
-        })
+    return allMovies
+            .map(({data}) => data)
+            .reduce((prevList, currList) => {
+                return [...prevList, ...currList]
+            }, [])
+            .map(({Title}) => Title);
     return moviesInTotal;
 }
 
